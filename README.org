@@ -1,0 +1,7 @@
+#+TITLE:
+#+AUTHOR: Christian E. Hopps
+#+EMAIL: chopps@gmail.com
+#+STARTUP: indent
+
+* Org Beamer Sandbox
+This is a repo for playing around with org mode presentations.
