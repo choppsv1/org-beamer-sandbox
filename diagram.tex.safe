@@ -1,0 +1,140 @@
+% Created 2018-03-13 Tue 20:18
+% Intended LaTeX compiler: pdflatex
+\documentclass[24pt,presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{float}
+\usepackage{parskip}
+\usepackage{hyperref}
+\usepackage[cachedir=/tmp/chopps/.minted/\jobname]{minted}
+\usepackage[section]{placeins}
+\usepackage{tikz}
+\usepackage{caption}
+\usepackage{adjustbox}
+\usepackage[mathscr]{eucal}
+\usepackage{latexsym}
+\usetheme[everytitleformat=regular]{metropolis}
+\author{Christian E. Hopps}
+\date{\today}
+\title{Coding Example}
+\subtitle{Christian E. Hopps}
+\usemintedstyle[python]{friendly}
+\usepackage{svg}
+\usepackage{tikz}
+\usetikzlibrary{chains}
+\hypersetup{
+ pdfauthor={Christian E. Hopps},
+ pdftitle={Coding Example},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 25.3.1 (Org mode 9.1.7)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\begin{minted}[]{common-lisp}
+    ;; Support output of both tikz and png
+     (defmacro by-backend (&rest body)
+       `(case (org-bound-and-true-p org-export-current-backend)
+         ,@body))
+
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((latex . t)))
+
+     (defalias 'org-babel-execute:tikz 'org-babel-execute:latex)
+     (defalias 'org-babel-expand-body:tikz 'org-babel-expand-body:latex)
+
+     (add-to-list 'org-src-lang-modes '("tikz" . latex))
+
+   (defvar org-babel-default-header-args:tikz
+     '((:imagemagick . "yes")
+       (:iminoptions . "-density 600")
+       (:imoutoptions . "-geometry 800")
+       (:results . "file raw")
+       (:fit . "yes")
+       (:headers . "(\\usepackage{tikz})")
+       (:exports . "results")))
+
+;; I define this utility function that is lob-ingested:
+
+;; ,#+name: wrap-res
+;; ,#+BEGIN_SRC emacs-lisp :var link="" :var caption="" :var label="" :results raw :exports none
+;; ,(concat "#+LABEL: " label "\n#+CAPTION: " caption "\n" link)
+;; ,#+END_SRC
+
+;; I also define a macro (it's on one line but for this email I'm wrapping it)
+
+;; ,#+macro: tikzfig #+header: :file (by-backend (latex "$1.tikz") (t
+;; , "$1.png")) :imagemagick yes :iminoptions -density 600 :imoutoptions
+;; , -geometry 300 :results file raw :fit yes :headers
+;; , '("\\usepackage{tikz}") :post
+;; , wrap-res(link=*this*,label="fig:$1",caption="$2")
+
+;; I can then have the following that is exported both in tikz and png (I
+;; do not use svg as I found htlatex lacking for text nodes):
+
+;; ,{{{tikzfig(cnf-example,An ordinal in Cantor normal form)}}}
+;; ,#+begin_src latex
+;; ,\begin{tikzpicture}[scale=2, every node/.style={transform shape}]
+;; ,\node[color=blue]{$\omega^{(\omega^\omega\,+\, \omega^2 \times 8 \,+\, \omega)}+ \omega^\omega + \omega^4+ 6$};
+;; ,\end{tikzpicture}
+;; ,#+end_src
+
+;; The first argument of the macro is the label of the figure (with "fig:"
+;; added automatically) as well as the file used to export the figure, the
+;; second argument is the caption.
+\end{minted}
+
+
+\section{Initial Slide}
+\label{sec:org8a3ef61}
+\begin{frame}[fragile,label={sec:org0948584}]{Wrap}
+ \begin{center}
+\includesvg[width=.9\linewidth]{wrap2}
+\end{center}
+
+\begin{center}
+\includesvg[width=.9\linewidth]{wrap}
+\end{center}
+
+\begin{minted}[]{sh}
+echo Hello
+\end{minted}
+\end{frame}
+
+\begin{frame}[label={sec:orgd123bf6}]{Graphviz}
+\begin{center}
+\includesvg[width=.9\linewidth]{dotout1}
+\end{center}
+\end{frame}
+
+\begin{frame}[label={sec:org2b244ce}]{Tesitng}
+\begin{tikzpicture}[scale=0.1]
+\draw[fill=green] (3,0) circle (9);
+\draw[fill=orange] (1,0) circle (5);
+\draw[fill=blue] (0,0) circle (3);
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}[label={sec:orgb6a9e59}]{Graphviz}
+\begin{center}
+\includesvg[width=.9\linewidth]{dotout2}
+\end{center}
+\end{frame}
+\begin{frame}[label={sec:orgc9cadc9}]{DC Diagram}
+\begin{center}
+\includegraphics[width=.9\linewidth]{tikz.png}
+\end{center}
+\end{frame}
+\end{document}

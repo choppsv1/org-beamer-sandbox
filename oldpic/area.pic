@@ -1,0 +1,143 @@
+.PS 8 8
+
+struct_box_wid = 2.0
+struct_box_ht = 0.2
+typeoff = 0.1
+fieldoff = 0.9 
+
+.\"
+.\" ospf_area_t
+.\"
+
+
+AREA:	[ down
+	
+	[ down
+  box invis ht struct_box_ht wid struct_box_wid "\textbf{ospf_area_t}" ]
+	
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{db_tree}" with .e at last box .w + (typeoff, 0) ljust
+	"area_tree" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{ospf_graph}" with .e at last box .w + (typeoff, 0) ljust
+	"area_graph" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{ospf_area_t *}" with .e at last box .w + (typeoff, 0) ljust
+	"area_next" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{ospf_ptwalk_t *}" with .e at last box .w + (typeoff, 0) ljust
+	"area_ptwalk" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{vertex_t *}" with .e at last box .w + (typeoff, 0) ljust
+	"area_rtrls" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{areaid_t}" with .e at last box .w + (typeoff, 0) ljust
+	"area_id" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{ospf_intf_t *}" with .e at last box .w + (typeoff, 0) ljust
+	"area_intf" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{netrange_t *}" with .e at last box .w + (typeoff, 0) ljust
+	"area_nrtab" with .e at .5 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{flag_t}" with .e at last box .w + (typeoff, 0) ljust
+	"area_rtrbits" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{u_int8}" with .e at last box .w + (typeoff, 0) ljust
+	"area_options" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{u_int32}" with .e at last box .w + (typeoff, 0) ljust
+	"area_absr_cnt" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{u_int32}" with .e at last box .w + (typeoff, 0) ljust
+	"area_abr_cnt" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{u_int8}" with .e at last box .w + (typeoff, 0) ljust
+	"area_spfcount" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{auth_t}" with .e at last box .w + (typeoff, 0) ljust
+	"area_auth" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{flag_t}" with .e at last box .w + (typeoff, 0) ljust
+	"area_changes" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{int}" with .e at last box .w + (typeoff, 0) ljust
+	"area_hasnr" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{u_int32}" with .e at last box .w + (typeoff, 0) ljust
+	"area_nvlinks" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	]
+			
+	[ down
+	box ht struct_box_ht wid struct_box_wid
+  "\textit{int}" with .e at last box .w + (typeoff, 0) ljust
+	"area_transitcapability" with .e at .3 of the way between last box .w and last box .e ljust
+	box invis ht struct_box_ht wid struct_box_wid with .e at last box .e
+	] ] 
+.PE

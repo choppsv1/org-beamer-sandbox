@@ -1,0 +1,441 @@
+#+TITLE: Optical Channel Monitor
+#+AUTHOR: Christian E. Hopps
+#+EMAIL: chopps@gmail.com
+
+#+LATEX_CLASS: beamer
+#+OPTIONS: h:2 toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+
+#+LaTeX_CLASS_OPTIONS: [24pt,presentation]
+
+#+BEAMER_FRAME_LEVEL: 2
+#+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+#+STARTUP: beamer content
+
+#+BEAMER_HEADER: \subtitle{Christian E. Hopps \n -- Aaron Dudek}
+
+#+MACRO: mkbold @@latex:\textbf{@@$1@@latex:}@@
+#+MACRO: mkcode @@latex:\texttt{@@$1@@latex:}@@
+#+MACRO: mkred @@latex:{\color{red}@@$1@@latex:}@@
+
+#+BEAMER_THEME: metropolis [everytitleformat=regular]
+#+BEAMER_INNER_THEME: metropolis
+#+BEAMER_OUTER_THEME: metropolis
+#+BEAMER_COLOR_THEME: metropolis
+
+#+COMMENT: #+BEAMER_HEADER: \usepackage{scrextend}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{color}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{tikz}
+#+COMMENT: #+BEAMER_HEADER: \usetikzlibrary{shapes}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{dot2texi}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{pgf}
+#+COMMENT: #+BEAMER_HEADER: \usepackage[pdftex]{graphicx}
+#+COMMENT: #+BEAMER_HEADER: \changefontsizes{24pt}
+
+#+COMMENT: #+LaTeX_HEADER: \usemintedstyle{monokai}
+#+COMMENT: #+LaTeX_HEADER: \newminted{python}{fontsize=\tiny}
+#+COMMENT: #+LaTeX_HEADER: \newminted{Python}{fontsize=\tiny}
+
+#+LaTeX_HEADER: \BeforeBeginEnvironment{minted}{\begin{\tiny} \begin{singlespacing*}}
+#+LaTeX_HEADER: \AfterEndEnvironment{minted}{\end{tiny} \end{singlespacing*}}
+
+
+* Title Slide
+   :PROPERTIES:
+   :EXPORT_LaTeX_CLASS: beamer
+   :EXPORT_LaTeX_CLASS_OPTIONS: [24pt,presentation]
+   :EXPORT_BEAMER_THEME: metropolis
+   :EXPORT_TITLE: Export Title Property
+   :EXPORT_SUBTITLE: Export Sub Christian E. Hopps <chopps@gmail.com>
+   :EXPORT_AUTHOR: Export Auth Christian E. Hopps <chopps@gmail.com>
+   :EXPORT_DATE: Export Date February 2, 2016
+   :BEAMER_TITLE: Beamer Title Property
+   :BEAMER_SUBTITLE: Beamer Sub Christian E. Hopps <chopps@gmail.com>
+   :BEAMER_AUTHOR: Beamer Auth Christian E. Hopps <chopps@gmail.com>
+   :BEAMER_DATE: Beamer Date February 2, 2016
+   :END:
+
+** Deployments
+ - OCM 4 port
+   - Bonn ODWS (black link)
+ - OCM 1 port
+   - Nürnberg
+   - Hamburg
+** Bonn Installation
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+    \begin{figure}
+    \centering
+    \includegraphics[width=\paperwidth]{~/Dropbox/Diagrams/ocm-bonn-4port.pdf}
+    \end{figure}
+   #+end_latex
+
+** Nürnberg (Hamburg) Installation
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+    \begin{figure}
+    \centering
+    \includegraphics[width=\paperwidth]{~/Dropbox/Diagrams/ocm-n5-1port.pdf}
+    \end{figure}
+   #+end_latex
+
+** Design
+- Ubuntu Raspberry Pi 2 Controller
+- Python driver w/ netconf server interface
+- JDSU OCM HW serial connection
+
+** Design
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+    \begin{figure}
+    \centering
+    \includegraphics{~/Dropbox/Diagrams/ocm-device.pdf}
+    \end{figure}
+   #+end_latex
+
+** Hardware
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+    \begin{figure}
+    \centering
+    \noindent\makebox[\textwidth]{\includegraphics[width=\paperwidth]{~/Dropbox/OCM-Preso/single-port-box.JPG}}
+    \end{figure}
+   #+end_latex
+
+** Hardware Vendor: */Dudek Designs/*
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+    \begin{figure}
+    \centering
+    \noindent\makebox[\textwidth]{\includegraphics[height=\paperheight]{~/Dropbox/OCM-Preso/single-port-box-aaron.JPG}}
+    \end{figure}
+   #+end_latex
+
+** Development Design
+   :PROPERTIES:
+   :BEAMER_env: figure
+   :END:
+   #+begin_latex
+    \begin{figure}
+    \centering
+    \includegraphics{~/Dropbox/Diagrams/ocm-device-dev.pdf}
+    \end{figure}
+   #+end_latex
+
+** Yang Model
+*** Column Left
+   :PROPERTIES:
+   :BEAMER_col: 0.45
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+   module: jdsu-ocm
+
+     +--ro info
+     |  +--ro oper-mode
+     |  +--ro temp
+     |  +--ro version
+     |  ...
+     +--rw channel-profile
+        +--rw profile-index
+        +--rw channel
+           +--rw frequency-start (key)
+           +--rw frequency-end    script
+   \end{verbatim}
+   #+end_latex
+*** Column Right
+   :PROPERTIES:
+   :BEAMER_col: 0.45
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+   rpcs:
+     +--x reset
+     +--x self-test
+     +--x full-125-scan
+        +--ro output
+           +--ro port
+              +--ro port-index (key)
+              +--ro point
+                 +--ro frequency (key)
+                 +--ro power
+     +--x channel-scan
+     +--x spectral-density
+   \end{verbatim}
+   #+end_latex
+#+BEGIN_EXAMPLE
+#+END_EXAMPLE
+
+** RPC: {{{mkcode(get)}}}
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+
+   netconf-console --port=9931 --host=bn831-ossv-10a-de --get
+
+   <?xml version="1.0" encoding="UTF-8"?>
+   <rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+     <data>
+       <j:info xmlns:j="urn:TBD:params:xml:ns:yang:terastream:jdsu">
+         <j:safe-version>0.1.23</j:safe-version>
+         <j:device-info>VendorName=JDSU,ProductInfo=TRUEFLEX(R) OCM,SerialNumber=MM4007609-Q,HardwareRevision=001,ManufactureDate=20150420,PartNumber=21159239,CustomerPN=OCMSC04L1101</j:device-info>
+         <j:temp>323</j:temp>
+         <j:oper-mode>application-mode</j:oper-mode>
+         <j:application-version>1.1.98</j:application-version>
+         <j:ident-data>JDSU,FlexOCM,FlexSpectrum,hw00,cal04,appfw01.01.98</j:ident-data>
+       </j:info>
+     </data>
+   </rpc-reply>
+
+   \end{verbatim}
+   #+end_latex
+** Yang Model
+*** Column Left
+   :PROPERTIES:
+   :BEAMER_col: 0.45
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+   module: jdsu-ocm
+
+     +--ro info
+     |  +--ro oper-mode
+     |  +--ro temp
+     |  +--ro version
+     |  ...
+     +--rw channel-profile
+        +--rw profile-index
+        +--rw channel
+           +--rw frequency-start (key)
+           +--rw frequency-end    script
+   \end{verbatim}
+   #+end_latex
+*** Column Right
+   :PROPERTIES:
+   :BEAMER_col: 0.45
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+   rpcs:
+     +--x reset
+     +--x self-test
+     +--x full-125-scan
+        +--ro output
+           +--ro port
+              +--ro port-index (key)
+              +--ro point
+                 +--ro frequency (key)
+                 +--ro power
+     +--x channel-scan
+     +--x spectral-density
+   \end{verbatim}
+   #+end_latex
+#+BEGIN_EXAMPLE
+#+END_EXAMPLE
+
+** RPC: {{{mkcode(get-config)}}}
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+
+   netconf-console --port=9931 --host=bn831-ossv-10a-de --get-config
+
+   <?xml version="1.0" encoding="UTF-8"?>
+   <rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+     <data>
+       <j:channel-profile xmlns:j="urn:TBD:params:xml:ns:yang:terastream:jdsu">
+         <j:profile-index>1</j:profile-index>
+         <j:channel>
+           <j:range>
+             <j:frequency-start>1910313</j:frequency-start>
+             <j:frequency-end>1910687</j:frequency-end>
+           </j:range>
+         </j:channel>
+         ...
+         </j:channel>
+       </j:channel-profile>
+       <j:channel-profile xmlns:j="urn:TBD:params:xml:ns:yang:terastream:jdsu">
+         <j:profile-index>2</j:profile-index>
+       </j:channel-profile>
+       ...
+   \end{verbatim}
+   #+end_latex
+
+** Yang Model
+*** Column Left
+   :PROPERTIES:
+   :BEAMER_col: 0.45
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+   module: jdsu-ocm
+
+     +--ro info
+     |  +--ro oper-mode
+     |  +--ro temp
+     |  +--ro version
+     |  ...
+     +--rw channel-profile
+        +--rw profile-index
+        +--rw channel
+           +--rw frequency-start (key)
+           +--rw frequency-end    script
+   \end{verbatim}
+   #+end_latex
+*** Column Right
+   :PROPERTIES:
+   :BEAMER_col: 0.45
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+   rpcs:
+     +--x reset
+     +--x self-test
+     +--x full-125-scan
+        +--ro output
+           +--ro port
+              +--ro port-index (key)
+              +--ro point
+                 +--ro frequency (key)
+                 +--ro power
+     +--x channel-scan
+     +--x spectral-density
+   \end{verbatim}
+   #+end_latex
+#+BEGIN_EXAMPLE
+#+END_EXAMPLE
+
+** RPC: {{{mkcode(full-125-scan)}}}
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_latex
+   \tiny
+   \begin{verbatim}
+   netconf-console --port=9931 --host=bn831-ossv-10a-de --rpc=full-125-scan.xm
+
+   <?xml version="1.0" encoding="UTF-8"?>
+   <rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+     <data>
+       <j:port xmlns:j="urn:TBD:params:xml:ns:yang:terastream:jdsu">
+         <j:port-index>0</j:port-index>
+         <j:point>
+           <j:frequency>191000</j:frequency>
+           <j:power>-40.96</j:power>
+         </j:point>
+         <j:point>
+           <j:frequency>191006.25</j:frequency>
+           <j:power>-40.92</j:power>
+         </j:point>
+         <j:point>
+           <j:frequency>191012.5</j:frequency>
+           <j:power>-40.80</j:power>
+         </j:point>
+         .
+         .
+         .
+   \end{verbatim}
+   #+end_latex
+
+** Server
+- Define Netconf Server Class
+- Initialize
+- Implement RPCs
+** Netconf Server Example
+   :PROPERTIES:
+   :BEAMER_env: block
+   :END:
+
+   #+name: code example
+   #+begin_src python :exports code
+     class NetconfServer (object):
+         def __init__ (self, device, ssh_port=830, username=None, password=None, debug=False):
+             self.debug = debug
+
+             # Get SSH Key
+             datapath = resource_filename(Requirement.parse("jdsu"), "data")
+             host_key_path = os.path.join(datapath, "host_rsa_key")
+
+             # Initialize device
+             self.device = device
+             idn = device.get_idn_data()
+             assert idn[4] == "cal04"
+             self.device_lock = threading.Lock()
+
+             # Start the server.
+             self.controller = server.SSHUserPassController(username=username,
+                                                            password=password)
+
+             self.server = server.NetconfSSHServer(server_ctl=self.controller,
+                                                   port=ssh_port,
+                                                   host_key=host_key_path,
+                                                   server_methods=self,
+                                                   debug=debug)
+   #+end_src
+** RPC Code Example
+   :PROPERTIES:
+   :BEAMER_env: block
+   :END:
+
+   #+name: code example
+   #+begin_src python :exports code
+    def rpc_full_scan (self, unused_session, rpc, *params):
+        # No input values yet
+        if params:
+            raise ncerror.RPCSvrErrBadMsg(rpc)
+
+        rv = self._run_device_method(rpc, self.device.get_full_scan)
+
+        result = ncutil.elm("data")
+        # result = []
+        for port, points in rv:
+            portelm = ncutil.elm("j:port")
+            result.append(portelm)
+            portelm.append(ncutil.leaf_elm("j:port-index", port))
+            for freq, power in points:
+                ptelm = ncutil.subelm(portelm, "j:point")
+                ptelm.append(ncutil.leaf_elm("j:frequency", freq))
+                ptelm.append(ncutil.leaf_elm("j:power", "{:.2f}".format(power.dBm)))
+        return result
+   #+end_src
+
+** Code Metrics
+
+| File        | blank | comment |  code |
+|-------------+-------+---------+-------|
+| device.py   |   108 |      61 |   425 |
+| *server.py* |    44 |      28 | *153* |
+| sercat.py   |     6 |      37 |    58 |
+| main.py     |    11 |      12 |    50 |
+| error.py    |    11 |      14 |    48 |
+
+** References
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+#+LATEX: \tiny
+- Bonn Live Monitor:
+- JDSU Gitlab:
+- Netconf Github:
+- Device Specs:

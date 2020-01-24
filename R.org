@@ -1,0 +1,76 @@
+
+* Trying to plot tables.. this is just too hard.
+
+#+BEGIN_NOEXPORT
+#+TBLNAME:avail-pct-data
+|  Type | ESP+Pad | ESP+Pad | ESP+Pad | IP-TFS | IP-TFS | IP-TFS |
+|   MTU |     576 |    1500 |    9000 |    576 |   1500 |   9000 |
+| PSize |     540 |    1464 |    8964 |    536 |   1460 |   8960 |
+|-------+---------+---------+---------+--------+--------+--------|
+|    40 |  1250.0 |  3560.0 | 22310.0 |   7.46 |   2.74 |   0.45 |
+|   128 |   321.9 |  1043.8 |  6903.1 |   7.46 |   2.74 |   0.45 |
+|   256 |   110.9 |   471.9 |  3401.6 |   7.46 |   2.74 |   0.45 |
+|   536 |     0.7 |   173.1 |  1572.4 |   7.46 |   2.74 |   0.45 |
+|   576 |   100.0 |   154.2 |  1456.2 |   7.46 |   2.74 |   0.45 |
+|  1460 |    18.4 |     0.3 |   514.0 |   7.46 |   2.74 |   0.45 |
+|  1500 |    15.2 |   100.0 |   497.6 |   7.46 |   2.74 |   0.45 |
+|  8960 |    15.7 |    17.2 |     0.0 |   7.46 |   2.74 |   0.45 |
+#+TBLFM: $1=remote(obytes,@@#$1)::@3$2..@3$4=@2-$ipso::@3$5..@3$7=@2-$tfso::@4$2..@>$4=100*remote(obytes,@@#$$#)/$1;%.1f;N::@4$5..@>$7=100*$tfso/(@3/$1)/$1;%.2f;N
+#+END_NOEXPORT
+
+# #+begin_src R :var data=avail-pct-data :results output graphics :file test.png :width=600
+#+begin_src R :var data=avail-pct-data :results output
+  newdata <- data[-c(1,2,3), ]
+  # apply(data[,1], 1, paste)
+  colnames(newdata) <- paste (data[1,], data[2,], sep="-")
+  newdata <- newdata[,2:7]
+  rownames(newdata) <- data[4:11,1]
+  as.matrix(newdata)
+
+  # as.numeric(newdata)
+  # hist(newdata[,"PktSize"])
+#+end_src
+
+#+RESULTS:
+:      ESP+Pad-576 ESP+Pad-1500 ESP+Pad-9000 IP-TFS-576 IP-TFS-1500 IP-TFS-9000
+: 40   "1250.0"    "3560.0"     "22310.0"    "7.46"     "2.74"      "0.45"
+: 128  "321.9"     "1043.8"     "6903.1"     "7.46"     "2.74"      "0.45"
+: 256  "110.9"     "471.9"      "3401.6"     "7.46"     "2.74"      "0.45"
+: 536  "0.7"       "173.1"      "1572.4"     "7.46"     "2.74"      "0.45"
+: 576  "100.0"     "154.2"      "1456.2"     "7.46"     "2.74"      "0.45"
+: 1460 "18.4"      "0.3"        "514.0"      "7.46"     "2.74"      "0.45"
+: 1500 "15.2"      "100.0"      "497.6"      "7.46"     "2.74"      "0.45"
+: 8960 "15.7"      "17.2"       "0.0"        "7.46"     "2.74"      "0.45"
+
+# #+R: action:hist columns:1 colour:hotpink
+# #+R: intable:avail-pct outfile:"png" title:"histogram example"
+
+#+begin_src R :var data=avail-pct-data :results output graphics :file test2.png :width 1200
+  library(ggplot2)
+   # header = TRUE ignores the first line, check.names = FALSE allows '+' in 'C++'
+
+  newdata <- data[-c(1,2,3), ]
+  # apply(data[,1], 1, paste)
+  colnames(newdata) <- paste (data[1,], data[2,], sep="-")
+  newdata <- newdata[,2:7]
+  rownames(newdata) <- data[4:11,1]
+  mdata = as.matrix(newdata)
+
+  # benchmark <- data[,2:7]
+  # newdata <- data[-c(1,2,3), ]
+  # colnames(newdata) <- paste (data[1,], data[2,], sep="-")
+  # colnames(newdata)[1] <- "PktSize"
+  # 't()' is matrix tranposition, 'beside = TRUE' separates the benchmarks, 'heat' provides nice colors
+  # barplot(as.matrix(benchmark), beside = TRUE, col = heat.colors(4))
+  # barplot(as.matrix(newdata), beside = TRUE, col = heat.colors(7), ylim = c(0, 300))
+
+  # barplot(t(as.matrix(newdata)), col = heat.colors(6), ylim = c(0, 300))
+  # 'cex' stands for 'character expansion', 'bty' for 'box type' (we don't want borders)
+  # legend("topleft", colnames(newdata), cex = 0.9, bty = "n", fill = heat.colors(6))
+
+  ggplot(mdata, aes(fill=rownames(newdata), y=newdata, x=colnames(newdata))) +
+    geom_bar(position="dodge", stat="identity")
+#+end_src
+
+#+RESULTS:
+[[file:test2.png]]

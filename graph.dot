@@ -1,0 +1,12 @@
+graph structs {
+  subgraph "OCM" {
+    node[shape=record];
+    subgraph "Raspberry Pi" {
+      node[shape=record];
+      struct2 [label="{Raspberry Pi 2|Ethernet|JDSU Driver/Netconf Server|Serial Driver}"];
+      subgraph "cluster 2" {
+        struct3 [label="JDSU OCM HW"];
+      }
+    }
+  }
+}

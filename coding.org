@@ -1,0 +1,388 @@
+# -*- org-confirm-babel-evaluate: nil -*-
+#+TITLE: Coding Example
+#+AUTHOR: Christian E. Hopps\newline More Authors
+#+EMAIL: chopps@chopps.org
+#+STARTUP: beamer content entitiespretty
+
+#+LaTeX_CLASS_OPTIONS: [24pt,presentation]
+#+OPTIONS: h:2 toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t ':t
+
+#+MACRO: mkbold @@latex:\textbf{@@$1@@latex:}@@
+#+MACRO: mkcode @@latex:\texttt{@@$1@@latex:}@@
+#+MACRO: mkred @@latex:{\color{red}@@$1@@latex:}@@
+
+#+BEAMER_OUTER_THEME: metropolis
+#+BEAMER_INNER_THEME: metropolis
+#+BEAMER_FONT_THEME: metropolis
+#+BEAMER_COLOR_THEME: seahorse
+
+# #+BEAMER_THEME: m [everytitleformat=regular]
+#+BEAMER_HEADER: \subtitle{Special Christian E. Hopps \newline More Authors}
+#+BEAMER_HEADER: \usemintedstyle[python]{friendly}
+
+#+latex_header: \AtBeginSection[]{\begin{frame}<beamer>\frametitle{Topic}\tableofcontents[currentsection,hideothersubsections]\end{frame}}
+
+#+BEAMER_HEADER: \usepackage{svg}
+
+# don't use top of file # -*- org-export-babel-evaluate: nil -*-
+# use header argument ‘:eval never-export’.
+
+* Initial Slide
+** Plots
+   #+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
+   | Sede      | Max cites | H-index |
+   |-----------+-----------+---------|
+   | Chile     |    257.72 |   21.39 |
+   | Leeds     |    165.77 |   19.68 |
+   | Sao Paolo |     71.00 |   11.50 |
+   | Stockholm |    134.19 |   14.33 |
+   | Morelia   |    257.56 |   17.67 |
+
+** Docker Repo State (plantuml eps includegraphics)
+   :PROPERTIES:
+   :BEAMER_opt: fragile
+   :END:
+   #+begin_src plantuml :cmdline -teps :file sequence.ps :results silent
+   builder -> "docker-repo": docker push
+   "docker-repo" -> builder: need authentication
+   builder -> "docker-auth": get token
+   "docker-auth" -> builder: provide token
+   builder -> "docker-repo": push with token
+   "docker-repo" -> "docker-auth": check token
+   "docker-auth" -> "docker-repo": success
+   "docker-repo" -> builder: success
+   #+end_src
+   #+LATEX: \includegraphics[width=.7\linewidth]{sequence.ps}
+** Docker Repo State (plantuml eps results)
+   #+BEGIN_SRC plantuml :cmdline -teps :file sequence.ps
+   builder -> "docker-repo": docker push
+   "docker-repo" -> builder: need authentication
+   builder -> "docker-auth": get token
+   "docker-auth" -> builder: provide token
+   builder -> "docker-repo": push with token
+   "docker-repo" -> "docker-auth": check token
+   "docker-auth" -> "docker-repo": success
+   "docker-repo" -> builder: success
+   #+END_SRC
+   #+ATTR_LATEX: :height .9\textheight
+   #+RESULTS:
+** Docker Repo State (plantuml svg adjustbox)
+   #+begin_src plantuml :cmdline -tsvg :file sequence2.svg :results silent
+   builder -> "docker-repo": docker push
+   "docker-repo" -> builder: need authentication
+   builder -> "docker-auth": get token
+   "docker-auth" -> builder: provide token
+   builder -> "docker-repo": push with token
+   "docker-repo" -> "docker-auth": check token
+   "docker-auth" -> "docker-repo": success
+   "docker-repo" -> builder: success
+   #+end_src
+   #+LATEX: \begin{adjustbox}{max totalsize={.9\textwidth}{.9\textheight},center}
+   #+LATEX: \includesvg{sequence2}
+   #+LATEX: \end{adjustbox}
+** Docker Repo State (plantuml - tikz adjustbox)
+   #+begin_src plantuml :cmdline -tlatex:nopreamble :file sequence.tikz :results silent
+   builder -> "docker-repo": docker push
+   "docker-repo" -> builder: need authentication
+   builder -> "docker-auth": get token
+   "docker-auth" -> builder: provide token
+   builder -> "docker-repo": push with token
+   "docker-repo" -> "docker-auth": check token
+   "docker-auth" -> "docker-repo": success
+   "docker-repo" -> builder: success
+   #+end_src
+   #+LATEX: \begin{adjustbox}{max totalsize={.9\textwidth}{.9\textheight},center}
+   #+LATEX: \input{sequence.tikz}
+   #+LATEX: \end{adjustbox}
+
+** Docker Repo State (plantuml - tikz results)
+   #+begin_src plantuml :cmdline -tlatex:nopreamble :file sequence2.tikz
+   builder -> "docker-repo": docker push
+   "docker-repo" -> builder: need authentication
+   builder -> "docker-auth": get token
+   "docker-auth" -> builder: provide token
+   builder -> "docker-repo": push with token
+   "docker-repo" -> "docker-auth": check token
+   "docker-auth" -> "docker-repo": success
+   "docker-repo" -> builder: success
+   #+end_src
+   #+ATTR_LATEX: :width .9\textwidth :height .9\textheight
+   #+RESULTS:
+** Docker Repo State (plantuml svg results)
+   #+begin_src plantuml :cmdline -tsvg :file sequence.svg
+   builder -> "docker-repo": docker push
+   "docker-repo" -> builder: need authentication
+   builder -> "docker-auth": get token
+   "docker-auth" -> builder: provide token
+   builder -> "docker-repo": push with token
+   "docker-repo" -> "docker-auth": check token
+   "docker-auth" -> "docker-repo": success
+   "docker-repo" -> builder: success
+   #+end_src
+   # #+ATTR_LATEX: :width .9\textwidth :height .9\textheight
+   #+RESULTS:
+** Graphviz (dot eps results)
+    #+BEGIN_SRC dot :file dotout.ps :cmdline -Kdot -Tps
+      digraph {
+      // graph from left to right
+      rankdir=LR;
+      splines=true;
+      node [shape=box];
+
+      id [label="Install Graphviz"]
+      conf [label="Configure org-babel"]
+      dot [label="DOT in org-mode"]
+
+      id -> conf
+      conf -> dot
+      dot -> "Profit"
+      dot -> "Success" [style=dashed]
+      }
+    #+END_SRC
+    #+RESULTS:
+
+** Pic (diagrams std)
+*** Block Description                                                 :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .45
+    :END:
+    This is a description of a diagram
+    - This is a list item
+    - A second list item
+*** Block Diagram                                                     :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .45
+    :END:
+   #+begin_src pic :file picout2.tikz :cmdline -g
+   .PS
+   A: circle "alpha"
+   line right then down
+   B: circle "beta"
+   line from B.e right then down
+   C: circle "gamma"
+   line from C.e right then down
+   D: circle "delta"
+   line -> from A.s to B.w
+   line -> from B.s to C.w
+   line -> from C.s to D.w
+   .PE
+   #+end_src
+   #+RESULTS:
+   [[file:picout2.tikz]]
+
+** Pic (diagrams std/resizebox)
+*** Block Description                                                 :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .45
+    :END:
+    This is a description of a diagram
+    - This is a list item
+    - A second list item
+*** Block Diagram                                                     :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .45
+    :END:
+   #+begin_src pic :file picout2.tikz :cmdline -g
+   .PS
+   A: circle "alpha"
+   line right then down
+   B: circle "beta"
+   line from B.e right then down
+   C: circle "gamma"
+   line from C.e right then down
+   D: circle "delta"
+   line -> from A.s to B.w
+   line -> from B.s to C.w
+   line -> from C.s to D.w
+   .PE
+   #+end_src
+   #+ATTR_LATEX: :width .9\textwidth :height .9\textheight
+   #+RESULTS:
+
+** Pic (diagrams adjustbox)
+*** Block Description                                                 :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .45
+    :END:
+    This is a description of a diagram
+    - This is a list item
+    - A second list item
+*** Block Diagram                                                     :BMCOL:
+    :PROPERTIES:
+    :BEAMER_col: .45
+    :END:
+   #+begin_src pic :file picout.tikz :cmdline -g :results silent
+   .PS
+   A: circle "alpha"
+   line right then down
+   B: circle "beta"
+   line from B.e right then down
+   C: circle "gamma"
+   line from C.e right then down
+   D: circle "delta"
+   line -> from A.s to B.w
+   line -> from B.s to C.w
+   line -> from C.s to D.w
+   .PE
+   #+end_src
+   #+LATEX: \begin{adjustbox}{max totalsize={.9\textwidth}{.9\textheight},center}
+   #+LATEX: \input{picout.tikz}
+   #+LATEX: \end{adjustbox}
+
+** Pic (multi-babel)
+I have the following emacs lisp code to build up a dot input for a
+dependency graph:
+
+  ,#+begin_src org
+  ,#+name: graph-from-tables
+  ,#+header: :var options="" :var nodes='() graph='()
+  ,#+BEGIN_SRC emacs-lisp
+    (org-babel-execute:dot
+     (concat
+          "digraph {\n"
+          options "\n"   ;; "//rankdir=LR;\n" ;; remove comment characters '//' for horizontal layout; add for vertical layout
+          (mapconcat
+           (lambda (x)
+             (format "%s [label=\"%s\" shape=%s style=\"filled\" fillcolor=\"%s\"]"
+                             (car x)
+                             (nth 1 x)
+                             (if (string= "" (nth 2 x)) "box" (nth 2 x))
+                             (if (string= "" (nth 3 x)) "none" (nth 3 x))
+                             )) nodes "\n")
+          "\n"
+          (mapconcat
+           (lambda (x)
+             (format "%s -> %s [taillabel=\"%s\"]"
+                             (car x) (nth 1 x) (nth 2 x))) graph "\n")
+          "}\n") params)
+  ,#+END_SRC
+  ,#+end_src
+
+
+I've had a suggestion to use ":wrap src dot" for my elisp code, to avoid
+using internal API calls.  This is a good suggestion but I cannot figure
+out how to actually accomplish what I want.
+
+
+
+Okay, I have figured this out and here is the solution in case anybody
+else wants to do something like this:
+
+1. create a very simple dot src block:
+
+
+     ,#+begin_src org
+     ,#+name: generate-graph
+     ,#+begin_src dot :var graph="digraph {}" :file graph.pdf
+       $graph
+     ,#+end_src
+     ,#+end_src
+
+2. call the original tables -> graph block with a :post command to
+   invoke this new block:
+
+   ,#+begin_src org
+     ,#+call: graph-from-tables(options="rankdir=LR;",nodes=subtasks-table[2:-1],graph=dependency-table[2:-1]) :exports results :results file :post generate-graph[:results file :exports results :file dependency-graph.pdf](graph=*this*)
+   ,#+end_src
+
+** \LaTeX fun.
+\alpha
+   - \LaTeX fun with character.
+   - Some greek characters \alpha \beta \to \gamma
+** Simply python
+   #+name: example
+   #+begin_src python :exports code
+   print("Hello World")
+   #+end_src
+
+** Python Blocks
+*** Code example                                                    :B_block:
+    :PROPERTIES:
+    :BEAMER_env: block
+    :BEAMER_col: 0.45
+    :END:
+    #+name: hello_results
+    #+begin_src python :exports both :results output
+    print("Hello World")
+    #+end_src
+*** The output                                                      :B_block:
+    :PROPERTIES:
+    :BEAMER_env: block
+    :BEAMER_col: 0.40
+    :END:
+    #+results: hello_results
+
+** First Slide
+*** First Normal Block
+    Text
+    Second line text
+*** Second Normal Block
+    - List
+    - List
+    - List
+** Second Slide
+*** A Theorem Block
+    :PROPERTIES:
+    :BEAMER_env: theorem
+    :BEAMER_act: <1->
+    :END:
+    E = mc^2
+*** Second Block
+    - List
+    - List
+    - List
+** Third Slide
+*** First Normal Block
+    Text
+    Second line text
+*** Second Normal Block
+    - List
+    - List
+    - List
+** Fourth Slide
+*** A Block Column                                                  :B_block:
+    :PROPERTIES:
+    :BEAMER_env: block
+    :BEAMER_col: 0.5
+    :END:
+
+*** Just a column with contents
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+    Some text the headline above is ignored. Maybe more useful as picture
+** End of intro to new ox-beamer
+   http://orgmode.org/worg/exporters/ox-overview.html
+   http://orgmode.org/worg/exporters/beamer/ox-beamer.html
+
+   - Useful to use conversion with old examples http://orgmode.org/worg/org-8.0.html
+   - Old?: http://orgmode.org/worg/exporters/beamer/tutorial.html
+** Python
+   - Inline backends? @ @ backend:value @ @ ?
+
+#+COMMENT: #+BEAMER_HEADER: \usemintedstyle[python]{friendly}
+
+#+COMMENT: #+BEAMER_HEADER: \usepackage{adjustbox}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{scrextend}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{color}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{tikz}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{tikz,pgf}
+#+COMMENT: #+BEAMER_HEADER: \usetikzlibrary{calc,positioning,mindmap,trees,decorations.pathreplacing}
+#+COMMENT: #+BEAMER_HEADER: \usetikzlibrary{calc,positioning,mindmap,trees,decorations.pathreplacing}
+
+#+COMMENT: #+BEAMER_HEADER: \usetikzlibrary{shapes}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{dot2texi}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{pgf}
+#+COMMENT: #+BEAMER_HEADER: \usepackage[pdftex]{graphicx}
+#+COMMENT: #+BEAMER_HEADER: \changefontsizes{24pt}
+
+#+COMMENT: +LaTeX_HEADER: \usemintedstyle{monokai}
+#+COMMENT: #+LaTeX_HEADER: \newminted{python}{fontsize=\tiny}
+#+COMMENT: #+LaTeX_HEADER: \newminted{Python}{fontsize=\tiny}
+
+#+COMMENT: #+LaTeX_HEADER: \BeforeBeginEnvironment{minted}{\begin{\tiny} \begin{singlespacing*}}
+#+COMMENT: #+LaTeX_HEADER: \AfterEndEnvironment{minted}{\end{\tiny} \end{singlespacing*}}
+
+# #+BEAMER_INNER_THEME: metropolis
+# #+BEAMER_OUTER_THEME: metropolis
+# #+BEAMER_COLOR_THEME: metropolis

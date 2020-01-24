@@ -1,0 +1,199 @@
+.pl 8.5in
+.ll 9
+
+.PS
+
+objelmht = .2
+objelmwid = 1
+minoutwid = .2
+vlinkzeefrac = 1 / 2
+ptrind = .075
+notdescfill = .3
+
+# $1 from location dnl
+# $2 to location dnl
+# $3 minimum width dnl
+# $4 horizontal indentation for pointer dnl
+# $5 direction of curve dnl
+# $6 vertical indention from top of endpoint dnl
+
+
+
+
+
+
+
+
+
+
+#
+# draw graph to the right of everything
+#
+down
+
+Upper: [
+	right
+	move
+	move
+	move
+	{ Label: [
+		"\s+9\s+7OSPF Border Router Vertex\s-7\s-9"
+	] }
+	move
+	move
+]
+
+down
+move
+
+Lower: [
+right
+
+	Graph: [
+		down
+
+		move 
+		move 
+		move
+
+		right
+
+		BR1: circle fill 1 rad .025
+		"A" at last circle .w - (.1, 0)
+		move to BR1.e
+		line dashed right .7 ->
+		"C" at last line .end + (.1, 0)
+		move to BR1.e
+		line dashed right .5 up .5 ->
+		"B" at last line .end + (.1, 0)
+	]
+
+
+move
+move
+move
+
+#
+# Border router and gateway
+#
+
+VA: [
+		down
+
+		boxht = objelmht
+		boxwid = objelmwid
+
+		box invis "\fBvertex_t\fI(A)\fP"
+	Top:	box fill notdescfill ht boxht
+	ID:	box ljust "vtx_id (\fIA\fP)"
+		box fill notdescfill
+	Gw:	box ljust "vtx_gw"
+		box fill notdescfill
+
+		reset boxht, boxwid
+]	
+
+GA: [
+		down
+
+		boxht = objelmht
+		boxwid = objelmwid
+
+		box invis "\fBgw_entry\fI(A)\fP"
+	Top:	box fill notdescfill ht boxht
+	Addr:	box ljust "gw_addr (\fIA\fP)"
+		box fill notdescfill
+	RtQ:	box ljust "gw_rtq (\fIA\fP)"
+		box fill notdescfill
+
+		reset boxht, boxwid
+] with .nw at .ne of VA + (.5, 0)
+
+RB: [
+		down
+
+		boxht = objelmht
+		boxwid = objelmwid
+
+		box invis "\fBrt_entry\fI(B)\fP"
+	Top:	box fill notdescfill
+	RtQ:	box ljust ht boxht * 2 "rt_rtq"
+		box fill notdescfill
+	Data:	box ljust "rt_data"
+		box fill notdescfill
+
+		reset boxht, boxwid
+] with .nw at .ne of GA.RtQ + (.5, objelmht * 2)
+
+RC: [
+		down
+
+		boxht = objelmht
+		boxwid = objelmwid
+
+		box invis "\fBrt_entry\fI(C)\fP"
+	Top:	box fill notdescfill
+	RtQ:	box ljust ht boxht * 2 "rt_rtq"
+		box fill notdescfill
+	Data:	box ljust "rt_data"
+		box fill notdescfill
+
+		reset boxht, boxwid
+] with .nw at .ne of RB + (.5, 0)
+
+line from RB.RtQ.ne + (-ptrind, -objelmht * .6) to RC.RtQ.nw + (0, - objelmht * .6) ->
+line from RB.RtQ.se + (0, objelmht * .6) to RC.RtQ.sw + (ptrind, objelmht * .6)  <-
+line from GA.RtQ.e + (-ptrind, .025) to RB.RtQ.nw - (0, .025 + objelmht / 2) ->
+
+# zee_splarrow(`GA.RtQ.e', `RB.Top.nw', `vlinkzeefrac', `ptrind', `.025')
+
+{
+	frx = VA.Gw.e.x
+	fry = VA.Gw.e.y
+	tox = GA.Top.nw.x
+	toy = GA.Top.nw.y - .025
+	frac = vlinkzeefrac
+	ind = ptrind
+	vw = frx - tox
+	vh = fry - toy
+
+	vwf = vw * frac
+	vhf = vh * frac
+
+	if vw < 0 then {
+		# arrow going from left to right
+		vw = - vw;
+		vwf = - vwf;
+		if vh >= 0 then {
+			# arrow going from top to bottom
+			spline from (frx - ind, fry) to (frx + vwf, fry) then \
+				to (tox - vwf, toy) then \
+				to (tox, toy) ->
+		} else {
+			# arrow going from bottom to top
+			vh = - vh
+			vhf = - vhf
+			spline from (frx - ind, fry) to (frx + vwf, fry) then \
+				to (tox - vwf, toy) then \
+				to (tox, toy) ->
+		}
+	} else {
+		# arrow going from right to left
+		if vh >= 0 then {
+			# arrow going from top to bottom
+			spline from (frx + ind, fry) to (frx - vwf, fry) then \
+				to (tox + vwf, toy) then \
+				to (tox, toy) ->
+		} else {
+			# arrow going from bottom to top
+			vh = - vh;
+			vhf = - vhf
+			spline from (frx + ind, fry) to (frx - vwf, fry) then \
+				to (tox + vwf, toy) then \
+				to (tox, toy) ->
+		}
+	}
+}
+
+]
+.PE

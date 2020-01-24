@@ -1,0 +1,77 @@
+# -*- org-confirm-babel-evaluate: nil -*-
+#+TITLE: Coding Example
+#+AUTHOR: Christian E. Hopps\newline More Authors
+#+EMAIL: chopps@chopps.org
+#+STARTUP: beamer content entitiespretty
+
+#+LaTeX_CLASS_OPTIONS: [24pt,presentation]
+#+OPTIONS: h:2 toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t ':t
+
+#+MACRO: mkbold @@latex:\textbf{@@$1@@latex:}@@
+#+MACRO: mkcode @@latex:\texttt{@@$1@@latex:}@@
+#+MACRO: mkred @@latex:{\color{red}@@$1@@latex:}@@
+
+#+BEAMER_OUTER_THEME: metropolis
+#+BEAMER_INNER_THEME: metropolis
+#+BEAMER_FONT_THEME: metropolis
+#+BEAMER_COLOR_THEME: seahorse
+
+# #+BEAMER_THEME: m [everytitleformat=regular]
+#+BEAMER_HEADER: \subtitle{Special Christian E. Hopps \newline More Authors}
+#+BEAMER_HEADER: \usemintedstyle[python]{friendly}
+
+#+latex_header: \AtBeginSection[]{\begin{frame}<beamer>\frametitle{Topic}\tableofcontents[currentsection,hideothersubsections]\end{frame}}
+
+# #+BEAMER_HEADER: \usepackage{svg}
+
+# don't use top of file # -*- org-export-babel-evaluate: nil -*-
+# use header argument ‘:eval never-export’.
+
+* Initial Slide
+** Plots
+   #+PLOT: title:"Citas" ind:1 deps:(3) type:2d with:histograms set:"yrange [0:]"
+   | Sede      | Max cites | H-index |
+   |-----------+-----------+---------|
+   | Chile     |    257.72 |   21.39 |
+   | Leeds     |    165.77 |   19.68 |
+   | Sao Paolo |     71.00 |   11.50 |
+   | Stockholm |    134.19 |   14.33 |
+   | Morelia   |    257.56 |   17.67 |
+
+** \LaTeX fun.
+\alpha
+   - \LaTeX fun with character.
+   - Some greek characters \alpha \beta \to \gamma
+** Simply python
+   #+name: example
+   #+begin_src python :exports code
+   print("Hello World")
+   #+end_src
+
+
+#+COMMENT: #+BEAMER_HEADER: \usemintedstyle[python]{friendly}
+
+#+COMMENT: #+BEAMER_HEADER: \usepackage{adjustbox}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{scrextend}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{color}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{tikz}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{tikz,pgf}
+#+COMMENT: #+BEAMER_HEADER: \usetikzlibrary{calc,positioning,mindmap,trees,decorations.pathreplacing}
+#+COMMENT: #+BEAMER_HEADER: \usetikzlibrary{calc,positioning,mindmap,trees,decorations.pathreplacing}
+
+#+COMMENT: #+BEAMER_HEADER: \usetikzlibrary{shapes}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{dot2texi}
+#+COMMENT: #+BEAMER_HEADER: \usepackage{pgf}
+#+COMMENT: #+BEAMER_HEADER: \usepackage[pdftex]{graphicx}
+#+COMMENT: #+BEAMER_HEADER: \changefontsizes{24pt}
+
+#+COMMENT: +LaTeX_HEADER: \usemintedstyle{monokai}
+#+COMMENT: #+LaTeX_HEADER: \newminted{python}{fontsize=\tiny}
+#+COMMENT: #+LaTeX_HEADER: \newminted{Python}{fontsize=\tiny}
+
+#+COMMENT: #+LaTeX_HEADER: \BeforeBeginEnvironment{minted}{\begin{\tiny} \begin{singlespacing*}}
+#+COMMENT: #+LaTeX_HEADER: \AfterEndEnvironment{minted}{\end{\tiny} \end{singlespacing*}}
+
+# #+BEAMER_INNER_THEME: metropolis
+# #+BEAMER_OUTER_THEME: metropolis
+# #+BEAMER_COLOR_THEME: metropolis

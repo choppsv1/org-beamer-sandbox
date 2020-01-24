@@ -1,0 +1,233 @@
+# -*-org-confirm-babel-evaluate: nil -*-
+#+TITLE: Coding Example
+#+AUTHOR: Christian E. Hopps
+#+EMAIL: chopps@chopps.org
+#+STARTUP: beamer content entitiespretty
+
+#+LaTeX_CLASS_OPTIONS: [24pt,presentation]
+#+OPTIONS: h:2 toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t ':t
+
+#+MACRO: mkbold @@latex:\textbf{@@$1@@latex:}@@
+#+MACRO: mkcode @@latex:\texttt{@@$1@@latex:}@@
+#+MACRO: mkred @@latex:{\color{red}@@$1@@latex:}@@
+
+#+BEAMER_THEME: metropolis [everytitleformat=regular]
+#+BEAMER_HEADER: \subtitle{Christian E. Hopps}
+#+BEAMER_HEADER: \usemintedstyle[python]{friendly}
+#+BEAMER_HEADER: \usepackage{svg}
+#+BEAMER_HEADER: \usepackage{tikz}
+#+BEAMER_HEADER: \usetikzlibrary{chains}
+
+#+begin_src emacs-lisp :results silent
+    ;; Support output of both tikz and png
+     (defmacro by-backend (&rest body)
+       `(case (org-bound-and-true-p org-export-current-backend)
+         ,@body))
+
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((latex . t)))
+
+     (defalias 'org-babel-execute:tikz 'org-babel-execute:latex)
+     (defalias 'org-babel-expand-body:tikz 'org-babel-expand-body:latex)
+
+     (add-to-list 'org-src-lang-modes '("tikz" . latex))
+
+   (defvar org-babel-default-header-args:tikz
+     '((:imagemagick . "yes")
+       (:iminoptions . "-density 600")
+       (:imoutoptions . "-geometry 800")
+       (:results . "file raw")
+       (:fit . "yes")
+       (:headers . "(\\usepackage{tikz})")
+       (:exports . "results")))
+
+;; I define this utility function that is lob-ingested:
+
+;; ,#+name: wrap-res
+;; ,#+BEGIN_SRC emacs-lisp :var link="" :var caption="" :var label="" :results raw :exports none
+;; ,(concat "#+LABEL: " label "\n#+CAPTION: " caption "\n" link)
+;; ,#+END_SRC
+
+;; I also define a macro (it's on one line but for this email I'm wrapping it)
+
+;; ,#+macro: tikzfig #+header: :file (by-backend (latex "$1.tikz") (t
+;; , "$1.png")) :imagemagick yes :iminoptions -density 600 :imoutoptions
+;; , -geometry 300 :results file raw :fit yes :headers
+;; , '("\\usepackage{tikz}") :post
+;; , wrap-res(link=*this*,label="fig:$1",caption="$2")
+
+;; I can then have the following that is exported both in tikz and png (I
+;; do not use svg as I found htlatex lacking for text nodes):
+
+;; ,{{{tikzfig(cnf-example,An ordinal in Cantor normal form)}}}
+;; ,#+begin_src latex
+;; ,\begin{tikzpicture}[scale=2, every node/.style={transform shape}]
+;; ,\node[color=blue]{$\omega^{(\omega^\omega\,+\, \omega^2 \times 8 \,+\, \omega)}+ \omega^\omega + \omega^4+ 6$};
+;; ,\end{tikzpicture}
+;; ,#+end_src
+
+;; The first argument of the macro is the label of the figure (with "fig:"
+;; added automatically) as well as the file used to export the figure, the
+;; second argument is the caption.
+#+end_src
+
+
+* Initial Slide
+** Wrap
+   #+name: dotwrap
+   #+begin_src dot :var data="" :file wrap2.svg
+   $data
+   #+end_src
+
+   #+name: pycode
+   #+begin_src python :results output :exports none
+    print( """
+      graph structs {
+        fontsize=24;
+        compound=true;
+        node[fontsize=24; shape=record; style=filled; fillcolor=white];
+        subgraph clusterocm {
+          label="OCM";
+          style=filled; fillcolor=lightgray;
+          jdsu [label="JDSU OCM HW"];
+          subgraph clusterpi {
+            style=filled; fillcolor=lightblue;
+            label="Raspberry Pi";
+            rpi [label="{Ethernet|JDSU Driver/Netconf Server|Serial Driver}"]
+          }
+          rpi -- jdsu;
+        }
+      }
+      """)
+   #+END_SRC
+
+   #+BEGIN_SRC dot :file wrap.svg :cmdline -Kdot -Tsvg
+   #+call: pycode
+   #+END_SRC
+
+   #+RESULTS:
+   [[file:wrap.svg]]
+
+   #+BEGIN_SRC sh :results output
+   echo Hello
+   #+END_SRC
+
+   #+RESULTS:
+   : Hello
+
+** Graphviz
+    #+BEGIN_SRC dot :file dotout1.svg :cmdline -Kdot -Tsvg
+      graph structs {
+              fontsize=24;
+              compound=true;
+              node[fontsize=24; shape=record; style=filled; fillcolor=white];
+              subgraph clusterocm {
+                      label="OCM";
+                      style=filled; fillcolor=lightgray;
+                      jdsu [label="JDSU OCM HW"];
+                      subgraph clusterpi {
+                              style=filled; fillcolor=lightblue;
+                              label="Raspberry Pi";
+                              rpi [label="{Ethernet|JDSU Driver/Netconf Server|Serial Driver}"]
+                      }
+                      rpi -- jdsu;
+              }
+      }
+    #+END_SRC
+
+    #+RESULTS:
+    [[file:dotout1.svg]]
+
+** Tesitng
+   \begin{tikzpicture}[scale=0.1]
+   \draw[fill=green] (3,0) circle (9);
+   \draw[fill=orange] (1,0) circle (5);
+   \draw[fill=blue] (0,0) circle (3);
+   \end{tikzpicture}
+
+** Graphviz
+    #+BEGIN_SRC dot :file dotout2.svg :cmdline -Kdot -Tsvg
+      digraph G {
+        compound=true;
+        node[fontsize=32; shape=record; penwidth=1];
+        subgraph ocm {
+          label="OCM";
+          subgraph rpi {
+            label="Raspberry Pi";
+            rpi2[label="{Ethernet|JDSU Driver/Netconf Server|Serial Driver}"];
+          }
+          jdsu;
+        }
+      }
+    #+END_SRC
+    #+RESULTS:
+    [[file:dotout2.svg]]
+** DC Diagram
+    #+BEGIN_SRC latex :file tikz.svg :exports results :results value raw
+      \documentclass{article}
+      \usepackage{tikz}
+      \usetikzlibrary{chains}
+      \begin{document}
+
+      \begin{tikzpicture}[
+        scale=0.75,
+        start chain=1 going below,
+        start chain=2 going right,
+        node distance=1mm,
+        desc/.style={
+          scale=0.75,
+          on chain=2,
+          rectangle,
+          rounded corners,
+          draw=black,
+          very thick,
+          text centered,
+          text width=8cm,
+          minimum height=12mm,
+          fill=blue!60
+          },
+        it/.style={
+          fill=blue!40
+        },
+        level/.style={
+          scale=0.75,
+          on chain=1,
+          minimum height=12mm,
+          text width=2cm,
+          text centered
+        },
+        every node/.style={font=\sffamily}
+      ]
+
+      % Levels
+      \node [level] (Level 5) {Level 5};
+      \node [level] (Level 4) {Level 4};
+      \node [level] (Level 3) {Level 3};
+      \node [level] (Level 2) {Level 2};
+      \node [level] (Level 1.5) { };
+      \node [level] (Level 1) {Level 1};
+      \node [level] (Level 0) {Level 0};
+
+      % Descriptions
+      \chainin (Level 5); % Start right of Level 5
+      % IT levels
+      \node [desc, it] (Archives) {Archives/File Servers};
+      \node [desc, it, continue chain=going below] (ERP) {ERP/Finance/Messaging};
+      % ICS levels
+      \node [desc] (Operations) {Operations Management/Historians};
+      \node [desc] (Supervisory) {Supervisory Controls};
+      \node [desc, text width=3.5cm, xshift=2.25cm] (PLC) {PLC/RTU IP Communication};
+      \node [desc, text width=3.5cm, xshift=-4.5cm] (SIS) {Safety Instrumented Systems};
+      \node [desc, xshift=2.25cm] (IO) {I/O from Sensors};
+
+      \end{tikzpicture}
+      \end{document}
+    #+END_SRC
+
+    #+RESULTS:
+    [[file:tikz.png]]
+
+**  Artist Mode in Emacs Org Mode
+#+begin_src ditaa
+#+end_src
